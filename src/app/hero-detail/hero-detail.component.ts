@@ -14,10 +14,11 @@ export class HeroDetailComponent implements OnInit {
   @Input() hero: Hero;
 
   constructor(
-    private route: ActivatedRoute,
-    private heroService: HeroService,
-    private location: Location
-  ) {}
+      private route: ActivatedRoute,
+      private heroService: HeroService,
+      private location: Location
+  ) {
+  }
 
   ngOnInit(): void {
     this.getHero();
@@ -26,15 +27,42 @@ export class HeroDetailComponent implements OnInit {
   getHero(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.heroService.getHero(id)
-      .subscribe(hero => this.hero = hero);
+        .subscribe(hero => this.hero = hero);
   }
 
   goBack(): void {
     this.location.back();
   }
 
- save(): void {
+  save(): void {
+    someThirdPartyPromise().then(
+
+    )
     this.heroService.updateHero(this.hero)
-      .subscribe(() => this.goBack());
+        .subscribe(() => this.goBack());
+
   }
 }
+
+function someThirdPartyPromise() {
+  return new Promise((resolve => {
+    resolve(null);
+  }))
+}
+
+
+function debounce(func, wait, immediate) {
+  var timeout;
+  return function () {
+    var context = this, args = arguments;
+    var later = function () {
+      timeout = null;
+      if (!immediate) func.apply(context, args);
+    };
+    var callNow = immediate && !timeout;
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow) func.apply(context, args);
+  };
+}
+
